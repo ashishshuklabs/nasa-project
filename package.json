@@ -1,0 +1,9 @@
+{
+  "name": "nasa-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "cd client\nasa-ui; yarn build && mv dist\/* ../../server/public; cd ../../server ; yarn start"
+  }
+}
