@@ -10,22 +10,6 @@ const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 
 const resolve = (p: string) => path.resolve(__dirname, p);
 
-// const getStyleSheets = async () => {
-//   try {
-//     const assetpath = resolve("dist/assets");
-//     const files = await fs.readdir(assetpath);
-//     const cssAssets = files.filter(l => l.endsWith(".css"));
-//     const allContent = [];
-//     for (const asset of cssAssets) {
-//       const content = await fs.readFile(path.join(assetpath, asset), "utf-8");
-//       allContent.push(`<style type="text/css">${content}</style>`);
-//     }
-//     return allContent.join("\n");
-//   } catch {
-//     return "";
-//   }
-// };
-
 async function createServer(isProd = process.env.NODE_ENV === "production") {
     const app = express();
     // Create Vite server in middleware mode and configure the app type as
@@ -88,16 +72,11 @@ async function createServer(isProd = process.env.NODE_ENV === "production") {
             //    function calls appropriate framework SSR APIs,
             //    e.g. ReactDOMServer.renderToString()
             const appHtml = await render(req, getData, getStyles);
-            //   const cssAssets = isProd ? "" : await stylesheets;
-            const cssAssets = "";
-
-
-
-            // 5. Inject the app-rendered HTML into the template.
+            
+            // 5. Inject the app-rendered HTML into the template along with any data and css assets
             const html = template.replace(`<!--app-html-->`, appHtml)
-                .replace(`<!--head-->`, cssAssets)
                 .replace('</body>', `${dynamicScript(initData)} </body>`)
-                .replace('</head>', `${appStyles} </head>`);
+                .replace('<!--css-assets-->', `${appStyles}`);
 
             // 6. Send the rendered HTML back.
             res.status(200).set({ "Content-Type": "text/html" }).end(html);
