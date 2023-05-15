@@ -4,6 +4,10 @@ import { getAllPlanets } from './planets.controller';
 const planetsRoute = express.Router()
 
 
-planetsRoute.get('/planets', getAllPlanets)
+planetsRoute.get('/', getAllPlanets)
+// just a test for params
+planetsRoute.get('/:id', (req, res) => {
+    return  res.status(200).json('Hello this is planet ' + (100 + (+req.params.id)))
+})
 
 export default planetsRoute;
