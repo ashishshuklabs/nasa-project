@@ -80,10 +80,14 @@ async function createServer(isProd = process.env.NODE_ENV === "production") {
             const getData = (data: string) => {
                 initData = `window.INITIAL_STATE=${serialize(data)}`;
             }
+            let appStyles= ''
+            const getStyles = (styles: string)=> {
+                appStyles = styles
+            }
             // 4. render the app HTML. This assumes entry-server.js's exported `render`
             //    function calls appropriate framework SSR APIs,
             //    e.g. ReactDOMServer.renderToString()
-            const appHtml = await render(req, getData);
+            const appHtml = await render(req, getData, getStyles);
             //   const cssAssets = isProd ? "" : await stylesheets;
             const cssAssets = "";
 
@@ -92,7 +96,8 @@ async function createServer(isProd = process.env.NODE_ENV === "production") {
             // 5. Inject the app-rendered HTML into the template.
             const html = template.replace(`<!--app-html-->`, appHtml)
                 .replace(`<!--head-->`, cssAssets)
-                .replace('</body>', `${dynamicScript(initData)} </body>`);
+                .replace('</body>', `${dynamicScript(initData)} </body>`)
+                .replace('</head>', `${appStyles} </head>`);
 
             // 6. Send the rendered HTML back.
             res.status(200).set({ "Content-Type": "text/html" }).end(html);

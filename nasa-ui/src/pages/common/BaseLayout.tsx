@@ -7,10 +7,9 @@ type Props = {
 };
 export const BaseLayout = () => {
   return (
-    <>
-      <Layout />
+    <Layout>
       <Outlet />
-    </>
+    </Layout>
   );
 };
 
