@@ -1,35 +1,34 @@
 import React, { MouseEvent, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import one from "../../assets/images/1-img.png";
-import two from "../../assets/images/2-img.png";
-import three from "../../assets/images/3-img.png";
-import four from "../../assets/images/4-img.png";
+import imagesData from "./images.json";
+import ProgressiveImage from "./ProgressiveImage.component";
 
-// This should be a prop and passed in as children JSX
-const slides = [
-  {
-    image: one,
-    title: "Title 1 for test",
-    description: "title 1 description",
-  },
-  {
-    image: two,
-    title: "Title 2 for test",
-    description: "title 2 description",
-  },
-  {
-    image: three,
-    title: "Title 3 for test",
-    description: "title 3 description",
-  },
-  {
-    image: four,
-    title: "Title 4 for test",
-    description: "title 4 description",
-  },
-];
+const SLIDE_WIDTH = "500px"; // this can be a prop and needs to be passed to container and slide
 
-const slideWidth = "500px"; // this can be a prop and needs to be passed to container and slide
+const generateSlides = (s: typeof imagesData, isClone = false) => {
+  let newKey = 0;
+  if (s.length === 1) {
+    newKey = Math.random() * 9;
+  }
+  return s.map((slide, i) => {
+    return (
+      <Slide
+        key={i}
+        $slideWidth={SLIDE_WIDTH}
+        data-testid={`${isClone ? `clone-${i}` : `original-${i}`}`}
+      >
+        <h1>{slide.title}</h1>
+        <ProgressiveImage
+          key={slide.id}
+          placeholderUrl={slide.src}
+          title={slide.title}
+          originalUrl={slide.src.replace('&w=10&','&w=500&')}
+        />
+        <p>{slide.description}</p>
+      </Slide>
+    );
+  });
+};
 
 export const Carousel = () => {
   // starting with two extra slides one before and other after, so should start with slide on index 1 rather than 0 which would be copy of last slide
@@ -37,47 +36,25 @@ export const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const addSlideLeft = () => {
-    const lastSlide = [...slides];
-    const output = [];
-    output.push(lastSlide.reverse()[0]);
-    return output;
-  };
+  const slides = imagesData;
+  const getLeftSlide = () => {
+   const lastSlide = [...slides].reverse()[0];
+   return Array(lastSlide)
+  }
 
-  const addSlideRight = () => {
+  const getRightSlide = () => {
     const [firstSlide, ...others] = slides;
-    const output = [];
-    output.push(firstSlide);
-    return output;
+    return Array(firstSlide)
   };
-  const generateSlides = (s: typeof slides, isClone = false) => {
-    let newKey = 0;
-    if (s.length === 1) {
-      newKey = Math.random() * 9;
-    }
-    return s.map((slide, i) => {
-      return (
-        <Slide
-          key={i}
-          $slideWidth={slideWidth}
-          data-testid={`${isClone ? `clone-${i}` : `original-${i}`}`}
-        >
-          <h1>{slide.title}</h1>
-          <div>
-            <img alt={slide.title} src={slide.image} />
-          </div>
-          <p>{slide.description}</p>
-        </Slide>
-      );
-    });
-  };
+ 
 
   const handleClick = (
     e: MouseEvent<HTMLButtonElement>,
     direction: "right" | "left"
   ) => {
     // Knowing that we're transitioning helps in saving the current slide state
-    // If clicking too fast skip the click
+    // If clicking too fast skip the click,this will prevent errors in setting 
+    // invalid state calculation for the slide
     if (isTransitioning) {
       console.log("skipping, clicked too fast....");
       return;
@@ -110,12 +87,12 @@ export const Carousel = () => {
   };
 
   const sliderStyle: React.CSSProperties = {
-    transform: `translateX(calc(${currentSlide} * -${slideWidth}))`,
+    transform: `translateX(calc(${currentSlide} * -${SLIDE_WIDTH}))`,
     transition: transitionEnabled ? "transform 1s ease-in-out" : "none",
   };
 
   return (
-    <Container style={{width: slideWidth}}>
+    <Container style={{ width: SLIDE_WIDTH }}>
       <Button
         className="left"
         type="button"
@@ -132,9 +109,9 @@ export const Carousel = () => {
       </Button>
 
       <Slider style={sliderStyle} onTransitionEnd={handleTransition}>
-        {generateSlides(addSlideLeft())}
+        {generateSlides(getLeftSlide(), true)}
         {generateSlides(slides)}
-        {generateSlides(addSlideRight())}
+        {generateSlides(getRightSlide(), true)}
       </Slider>
     </Container>
   );
@@ -165,8 +142,6 @@ const Slider = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  /* gap: 20px; */
-  /* flex-shrink: 0; */
   flex: 1;
 `;
 
@@ -176,13 +151,4 @@ const Slide = styled.div<{ $slideWidth: string }>`
   display: flex;
   flex-direction: column;
   flex: 1 0 ${(props) => props.$slideWidth};
-  div {
-    height: 70%;
-    width: 100%;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
 `;

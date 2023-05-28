@@ -23,7 +23,7 @@ export async function render(
   // styled components recommends wrapping the style grabbing code in try-catch
   // to ensure styles are capured and sheet instance is appropriately garbage collected
   try {
-    // render app and collect app styles. Do not return to the browser yet
+    // render app and collect app styles. Do not return response to the browser yet
     renderToString(
       sheet.collectStyles(
         <React.StrictMode>
