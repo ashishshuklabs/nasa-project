@@ -11,7 +11,7 @@ const Home = () => {
     <div>
       <h1>HomePage</h1>
       <Carousel />
-      <h1>Palnets data</h1>
+      <h1>Planets data</h1>
       {loading && <div>Loading....</div>}
       {!loading && `Loaded ${planets?.length} planets in total`}
       {!loading && <ul>{getPlanets()}</ul>}

@@ -20,19 +20,27 @@ export async function render(
   const sheet = new ServerStyleSheet();
 
   const data = await a;
-  // render app and collect app styles. Do not return to the browser yet
-  renderToString(
-    sheet.collectStyles(
-      <React.StrictMode>
-        <StaticRouter location={req.originalUrl}>
-          {/* <App /> */}
-          <Routes>{createRouteElements()}</Routes>
-        </StaticRouter>
-      </React.StrictMode>
-    )
-  );
-  // Get all style tags and pass it to the callback
-  appStyles(sheet.getStyleTags())
+  // styled components recommends wrapping the style grabbing code in try-catch
+  // to ensure styles are capured and sheet instance is appropriately garbage collected
+  try {
+    // render app and collect app styles. Do not return response to the browser yet
+    renderToString(
+      sheet.collectStyles(
+        <React.StrictMode>
+          <StaticRouter location={req.originalUrl}>
+            {/* <App /> */}
+            <Routes>{createRouteElements()}</Routes>
+          </StaticRouter>
+        </React.StrictMode>
+      )
+    );
+    // Get all style tags and pass it to the callback
+    appStyles(sheet.getStyleTags());
+  } catch (e: unknown) {
+    console.log("style grab failed..",e instanceof Error ? e.message : e);
+  } finally {
+    sheet.seal();
+  }
   initialData(String(data));
   // Now we have all data, return the SSR'd app
   return renderToString(
