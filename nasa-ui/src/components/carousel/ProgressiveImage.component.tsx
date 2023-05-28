@@ -49,8 +49,8 @@ const ProgressiveImage = ({
   }, [originalUrl, intersecting]);
 
   return (
-    <ImageContainer className={className} $height={height}>
-      <img ref={imageRef} src={imgSource} alt={title} />
+    <ImageContainer  ref={imageRef} className={className} $height={height}>
+      <img src={imgSource} alt={title} />
     </ImageContainer>
   );
 };
