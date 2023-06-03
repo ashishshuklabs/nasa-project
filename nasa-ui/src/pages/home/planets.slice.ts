@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { API_URL, DataType } from '../../api/requests/planets'
-import { AppThunk, AppDispatch } from 'src/store/store'
-import { Planet } from './types'
+import { AppThunk } from 'src/store/store'
 import fetch from 'isomorphic-fetch'
 
 

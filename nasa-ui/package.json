@@ -23,7 +23,8 @@
     "react-router-dom": "^6.10.0",
     "serialize-javascript": "^6.0.1",
     "serve-static": "^1.15.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {
     "@types/compression": "1.7.2",

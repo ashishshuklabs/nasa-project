@@ -2,7 +2,7 @@ import React, { MouseEvent, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import imagesData from "./images.json";
 import ProgressiveImage from "./ProgressiveImage.component";
-
+import { ReactComponent as Arrow } from "../../assets/icons/arrow-right.svg";
 const SLIDE_WIDTH = "500px"; // this can be a prop and needs to be passed to container and slide
 
 const generateSlides = (s: typeof imagesData, isClone = false) => {
@@ -22,7 +22,7 @@ const generateSlides = (s: typeof imagesData, isClone = false) => {
           key={slide.id}
           placeholderUrl={slide.src}
           title={slide.title}
-          originalUrl={slide.src.replace('&w=10&','&w=500&')}
+          originalUrl={slide.src.replace("&w=10&", "&w=500&")}
         />
         <p>{slide.description}</p>
       </Slide>
@@ -38,22 +38,21 @@ export const Carousel = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const slides = imagesData;
   const getLeftSlide = () => {
-   const lastSlide = [...slides].reverse()[0];
-   return Array(lastSlide)
-  }
+    const lastSlide = [...slides].reverse()[0];
+    return Array(lastSlide);
+  };
 
   const getRightSlide = () => {
     const [firstSlide, ...others] = slides;
-    return Array(firstSlide)
+    return Array(firstSlide);
   };
- 
 
   const handleClick = (
     e: MouseEvent<HTMLButtonElement>,
     direction: "right" | "left"
   ) => {
     // Knowing that we're transitioning helps in saving the current slide state
-    // If clicking too fast skip the click,this will prevent errors in setting 
+    // If clicking too fast skip the click,this will prevent errors in setting
     // invalid state calculation for the slide
     if (isTransitioning) {
       console.log("skipping, clicked too fast....");
@@ -98,14 +97,14 @@ export const Carousel = () => {
         type="button"
         onClick={(e) => handleClick(e, "left")}
       >
-        &larr;
+        <ArrowLeft title="Prev" />
       </Button>
       <Button
         className="right"
         type="button"
         onClick={(e) => handleClick(e, "right")}
       >
-        &rarr;
+        <ArrowRight title="Next" />
       </Button>
 
       <Slider style={sliderStyle} onTransitionEnd={handleTransition}>
@@ -131,14 +130,18 @@ const Button = styled.button`
   top: 50%;
   transform: translateY(-50%);
   z-index: 50;
-  background-color: rgba(243,243,243,0.7);
+  background-color: rgba(243, 243, 243, 0.7);
   border: none;
   border-radius: 100%;
-  padding: 10px;
   line-height: 100%;
   font-size: 30px;
   text-align: center;
-  
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   &.left {
     left: 0;
   }
@@ -146,7 +149,7 @@ const Button = styled.button`
     right: 0;
   }
   &:hover {
-    background-color: rgba(243,243,243,0.9);
+    background-color: rgba(243, 243, 243, 0.9);
   }
 `;
 const Slider = styled.div`
@@ -163,4 +166,9 @@ const Slide = styled.div<{ $slideWidth: string }>`
   display: flex;
   flex-direction: column;
   flex: 1 0 ${(props) => props.$slideWidth};
+`;
+
+const ArrowRight = styled(Arrow)``;
+const ArrowLeft = styled(Arrow)`
+  transform: rotate(-180deg);
 `;
