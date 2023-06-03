@@ -14,7 +14,7 @@ const Home = () => {
   const getPlanets = () =>
     typeof planets !== "string" &&
     planets.map((planet) => (
-      <li key={planet.postId}>
+      <li key={planet.id}>
         <h1>{planet.name}</h1>
         <p>{planet.email}</p>
         <p>{planet.body}</p>
