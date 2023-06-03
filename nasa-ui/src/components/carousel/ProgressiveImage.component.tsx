@@ -23,7 +23,7 @@ const ProgressiveImage = ({
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       const entry = entries[0]; // observing only one element
-      console.log('is intersecting....', entry.isIntersecting, entry.target.getAttribute('alt'))
+      // console.log('is intersecting....', entry.isIntersecting, entry.target.getAttribute('alt'))
       setIntersecting(entry.isIntersecting);
     }, { threshold: .5});
     if (imageRef.current) {

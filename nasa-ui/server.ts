@@ -6,11 +6,14 @@ import express from "express";
 import compression from "compression";
 import serveStatic from "serve-static";
 import { createServer as createViteServer } from "vite";
+
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 
 const resolve = (p: string) => path.resolve(__dirname, p);
 
 async function createServer(isProd = process.env.NODE_ENV === "production") {
+    
+
     const app = express();
     // Create Vite server in middleware mode and configure the app type as
     // 'custom', disabling Vite's own HTML serving logic so parent server
@@ -42,7 +45,7 @@ async function createServer(isProd = process.env.NODE_ENV === "production") {
 
         const dynamicScript = (code: string) => {
             return `
-        <script type="module">${code}</script>
+        <script>${code}</script>
         `
         }
         try {
@@ -62,17 +65,17 @@ async function createServer(isProd = process.env.NODE_ENV === "production") {
             const { render } = await vite.ssrLoadModule(isProd ? productionBuildPath : devBuildPath);
             let initData = ''
             const getData = (data: string) => {
-                initData = `window.INITIAL_STATE=${serialize(data)}`;
+                initData = `window.INITIAL_STATE=${JSON.parse(serialize(data))}`;
             }
-            let appStyles= ''
-            const getStyles = (styles: string)=> {
+            let appStyles = ''
+            const getStyles = (styles: string) => {
                 appStyles = styles
             }
             // 4. render the app HTML. This assumes entry-server.js's exported `render`
             //    function calls appropriate framework SSR APIs,
             //    e.g. ReactDOMServer.renderToString()
             const appHtml = await render(req, getData, getStyles);
-            
+
             // 5. Inject the app-rendered HTML into the template along with any data and css assets
             const html = template.replace(`<!--app-html-->`, appHtml)
                 .replace('</body>', `${dynamicScript(initData)} </body>`)
