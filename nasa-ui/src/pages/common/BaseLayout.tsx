@@ -17,4 +17,5 @@ const Layout = styled.main`
   margin: 0 auto;
   padding: 0;
   margin: 0;
+  background-color: #f2f2f2ed;
 `;

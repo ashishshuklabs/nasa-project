@@ -1,38 +1,38 @@
 [
     {
         "id":1,
-        "title": "image-1",
+        "title": "Sunset Kiss",
         "src": "https://images.unsplash.com/photo-1681652434236-25c5de7a6c6c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE1fGhtZW52UWhVbXhNfHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=10&q=60",
-        "description": "beautiful slide 1"
+        "description": "The sun kissed the horizon with a splash of orange and pink."
     },
     {
         "id":2,
-        "title": "image-2",
+        "title": "Butterfly Dance",
         "src": "https://th.bing.com/th?id=ORMS.fbf341735f3ef4b846cd01cf695515d9&pid=Wdp&w=10&h=304&qlt=90&c=1&rs=1&dpr=1.25&p=0",
-        "description": "beautiful slide 2"
+        "description": "She danced with grace and joy, like a butterfly in the breeze."
     },
     {
         "id":3,
-        "title": "image-3",
+        "title": "Starry Eyes",
         "src": "https://th.bing.com/th?id=ORMS.d36a080db29071ef776f66593a5fc944&pid=Wdp&w=10&h=156&qlt=90&c=1&rs=1&dpr=1.25&p=0",
-        "description":"beautiful slide 3"
+        "description":"His eyes sparkled like stars in the night sky."
     },
     {
         "id":4,
-        "title": "image-4",
+        "title": "Laughter Music",
         "src": "https://th.bing.com/th?id=ORMS.30c1c3286e7d0cb31e9826aa1998ed40&pid=Wdp&w=10&h=304&qlt=90&c=1&rs=1&dpr=1.25&p=0",
-        "description":"beautiful slide 4"
+        "description":"The sound of laughter filled the air, like music to the ears."
     },
     {
         "id":5,
-        "title": "image-5",
+        "title": "Flower Garden",
         "src": "https://th.bing.com/th?id=ORMS.e4a354a98710a17405028df7e1ba6e64&pid=Wdp&w=10&h=156&qlt=90&c=1&rs=1&dpr=1.25&p=0",
-        "description":"beautiful slide 5"
+        "description":"The flowers bloomed in a riot of colors, spreading their fragrance everywhere."
     },
     {
         "id":6,
-        "title": "image-6",
+        "title": "Precious Treasure",
         "src": "https://th.bing.com/th?id=ORMS.6171fc6946dc3736519c4251312d4a7a&pid=Wdp&w=10&h=304&qlt=90&c=1&rs=1&dpr=1.25&p=0",
-        "description":"beautiful slide 6"
+        "description":"He held her hand gently, as if it were a precious treasure."
     }
 ]
