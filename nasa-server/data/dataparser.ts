@@ -28,7 +28,7 @@ function getPlanets() {
             })
             .on('end', () => {
                 console.log('finished reading stream..')
-                console.log(habitablePlanets)
+                // console.log(habitablePlanets)
                 res(undefined)
             })
     })

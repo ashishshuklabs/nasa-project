@@ -6,7 +6,8 @@ import launchesRoute from './routes/launches/launches.route';
 const app = express();
 // apply cors for all requests so goes first
 app.use(cors({
-    origin:'localhost:3000'
+    origin:'http://localhost:7456',
+    
 }))
 //apply built-in json middleware
 app.use(express.json())

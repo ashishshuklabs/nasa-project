@@ -98,14 +98,14 @@ export const Carousel = () => {
         type="button"
         onClick={(e) => handleClick(e, "left")}
       >
-        Prev
+        &larr;
       </Button>
       <Button
         className="right"
         type="button"
         onClick={(e) => handleClick(e, "right")}
       >
-        Next
+        &rarr;
       </Button>
 
       <Slider style={sliderStyle} onTransitionEnd={handleTransition}>
@@ -127,14 +127,26 @@ const Container = styled.section`
 `;
 const Button = styled.button`
   position: absolute;
-  top: 20%;
+  cursor: pointer;
+  top: 50%;
   transform: translateY(-50%);
   z-index: 50;
+  background-color: rgba(243,243,243,0.7);
+  border: none;
+  border-radius: 100%;
+  padding: 10px;
+  line-height: 100%;
+  font-size: 30px;
+  text-align: center;
+  
   &.left {
     left: 0;
   }
   &.right {
     right: 0;
+  }
+  &:hover {
+    background-color: rgba(243,243,243,0.9);
   }
 `;
 const Slider = styled.div`
