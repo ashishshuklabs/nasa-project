@@ -3,6 +3,7 @@ import { Carousel } from "../../components/carousel/Carousel.component";
 import { useSelector, useStore } from "react-redux";
 import { Card } from "../../components/card/card.component";
 import styled from "styled-components";
+import { SplitScreen } from "../layout/SplitScreen";
 export type PlanetType = {
   postId: number;
   id: number;
@@ -20,31 +21,33 @@ const Home = () => {
   );
 
   const getPlanets = () =>
-    typeof planets !== "string" && (
+    typeof planets !== "string" ? (
       <CardContainer>
         {planets.map((planet) => (
           <Card key={planet.id} data={planet} />
         ))}
       </CardContainer>
-    );
+    ) : null;
 
   return (
     <div>
-      <h1>HomePage</h1>
-      <Carousel />
-      <h1>Planets data</h1>
-      {loading && <div>Loading....</div>}
-      {!loading && `Loaded ${planets?.length} planets in total`}
-      {!loading && getPlanets()}
+      <h1>Planets Homepage</h1>
+      <SplitScreen
+        heading={
+          loading ? "Loading...." : `Loaded ${planets?.length} planets in total`
+        }
+        left={<Carousel slideList={[]} slideWidth="100%" />}
+        right={getPlanets()}
+      />
     </div>
   );
 };
 
 export default Home;
 
-const CardContainer = styled.section`
+const CardContainer = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
+  width: 100%;
 `;

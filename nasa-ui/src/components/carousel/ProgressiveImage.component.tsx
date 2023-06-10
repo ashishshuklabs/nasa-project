@@ -54,7 +54,9 @@ const ProgressiveImage = ({
     </ImageContainer>
   );
 };
-
+// ToDo: Image heights are not constrained, find a way to restrict them
+// so that images are of same height given a specific width, calculated
+// automagically (using aspect-ratio??)
 const ImageContainer = styled.div<{ $height: string }>`
   width: 100%;
   height: ${(props) => props.$height};
