@@ -17,12 +17,13 @@ export const Card = ({ data }: CardProps) => {
 };
 
 const Container = styled.div`
-  width: 500px;
+  width: 100%;
   box-sizing: border-box;
   box-shadow: 1px 2px 4px #222;
   border: 1px solid #222;
   border-radius: 4px;
   padding: 10px;
+  max-width: 700px;
 `;
 
 const Heading = styled.h1``;
