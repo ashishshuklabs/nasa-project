@@ -47,19 +47,13 @@ const ElementContainer = styled.div`
     gap: 30px;
     flex-direction: row;
     align-items: unset;
-    /* justify-content: flex-start; */
   }
 `;
 const LeftItem = styled.div<Pick<SplitScreenProps, "leftWeight">>`
-  /* flex: ${(props) => props.leftWeight}; */
   margin: 10px;
   max-width: 100%;
-  /* background-color: #add8e6a6; */
 `;
 const RightItem = styled.div<Pick<SplitScreenProps, "rightWeight">>`
-  /* flex: ${(props) => props.rightWeight}; */
   margin: 10px;
   max-width: 100%;
-  /* background-color: #e6adbea6; */
-
 `;
