@@ -26,7 +26,8 @@ const generateSlides = (
       <Slide
         key={newKey !== 0 ? newKey : i}
         $slideWidth={slideWidth}
-        // data-testid={`${isClone ? `clone-${newKey}` : `original-${newKey}`}`}
+        // data-testid='slide'
+        data-testid={`${isClone ? `clone` : `original`}-slide`}
       >
         <h1>{slide.title}</h1>
         <ProgressiveImage
@@ -43,9 +44,7 @@ const generateSlides = (
 type CarouselProps = {
   slideWidth: string;
 };
-export const Carousel = ({
-  slideWidth = SLIDE_WIDTH,
-}: CarouselProps) => {
+export const Carousel = ({ slideWidth = SLIDE_WIDTH }: CarouselProps) => {
   // starting with two extra slides one before and other after, so should start with slide on index 1 rather than 0 which would be copy of last slide
   // Real slider index range should be 1 through length of
   const [currentSlide, setCurrentSlide] = useState(1);
@@ -106,7 +105,7 @@ export const Carousel = ({
   };
 
   return (
-    <Container style={{ width: slideWidth }} data-testid="slide-container">
+    <Container $width={slideWidth} data-testid="slide-container">
       <Button
         className="left"
         type="button"
@@ -123,6 +122,7 @@ export const Carousel = ({
       </Button>
 
       <Slider
+        data-testid="slider"
         style={sliderStyle}
         onTouchMove={(e) => handleClick(e, "left")}
         onTransitionEnd={handleTransition}
@@ -135,11 +135,10 @@ export const Carousel = ({
   );
 };
 
-const Container = styled.section`
-  width: 100%;
+const Container = styled.section<{ $width: string }>`
+  width: calc(${(props) => props.$width} - 2px); // take out 1px for the border or any margin added
   height: 300px;
   max-width: 700px;
-  /* min-width: 300px; */
 
   background-color: #fff;
   position: relative;
