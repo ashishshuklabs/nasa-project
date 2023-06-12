@@ -1,17 +1,35 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-interface SlideProps {
-  slideWidth: string;
-  child: ReactNode;
-}
-export const Slide = ({ child, slideWidth }: SlideProps) => (
-  <SlideComponent $slideWidth={slideWidth}>{child}</SlideComponent>
-);
+import { SlideContent } from "../../components/carousel/Slider.component";
+import ProgressiveImage from "./ProgressiveImage.component";
 
-const SlideComponent = styled.div<{ $slideWidth: string }>`
-  width: ${(props) => props.$slideWidth};
+interface SlideProps {
+  content: SlideContent;
+  type: 'clone'|'original';
+}
+export const Slide = ({ content, type }: SlideProps) => {
+  // const key = type + Math.ceil(Math.random() * 1000).toString();
+  const key = `slide-${type}-${content.id}`;
+  return (
+  <Container
+    key={key}
+    data-testid={key}
+  >
+    <h1>{content.title}</h1>
+    <ProgressiveImage
+      key={key}
+      placeholderUrl={content.src.toString()}
+      title={content.title.toString()}
+      originalUrl={content.src.toString().replace("&w=10&", "&w=500&")}
+    />
+    <p>{content.description}</p>
+  </Container>
+)};
+
+const Container = styled.div`
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  flex: 1 0 ${(props) => props.$slideWidth};
+  flex: 1 0 100%;
 `;

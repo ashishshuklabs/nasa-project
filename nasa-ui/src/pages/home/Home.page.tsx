@@ -1,9 +1,17 @@
 import { RootState } from "src/store/rootReducer";
-import { Carousel } from "../../components/carousel/Carousel.component";
+// import { Carousel } from "../../components/carousel/Carousel.component";
+import {
+  SlideContent,
+  SlideType,
+  Slider,
+} from "../../components/carousel/Slider.component";
 import { useSelector, useStore } from "react-redux";
 import { Card } from "../../components/card/card.component";
 import styled from "styled-components";
 import { SplitScreen } from "../layout/SplitScreen";
+import imagesData from "../../components/carousel/images.json";
+import { Slide } from "../../components/carousel/Slide.component";
+
 export type PlanetType = {
   postId: number;
   id: number;
@@ -29,6 +37,8 @@ const Home = () => {
       </CardContainer>
     ) : null;
 
+  // Make sure to add key prop to renderProp as the content being rendered will be an array. This is
+  // to avoid unique key prop warning from react.
   return (
     <div>
       <h1>Planets Homepage</h1>
@@ -36,7 +46,15 @@ const Home = () => {
         heading={
           loading ? "Loading...." : `Loaded ${planets?.length} planets in total`
         }
-        left={<Carousel slideList={[]} slideWidth="100%" />}
+        left={
+          <Slider
+            slideWidth="100%"
+            content={imagesData}
+            renderContent={(slide: SlideContent, type: SlideType) => (
+              <Slide key={`${slide.id}-${type}`} content={slide} type={type} />
+            )}
+          />
+        }
         right={getPlanets()}
       />
     </div>
