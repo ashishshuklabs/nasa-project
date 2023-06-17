@@ -1,5 +1,4 @@
 import { RootState } from "src/store/rootReducer";
-// import { Carousel } from "../../components/carousel/Carousel.component";
 import {
   SlideContent,
   SlideType,

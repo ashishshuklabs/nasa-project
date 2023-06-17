@@ -8,7 +8,6 @@ interface SlideProps {
   type: 'clone'|'original';
 }
 export const Slide = ({ content, type }: SlideProps) => {
-  // const key = type + Math.ceil(Math.random() * 1000).toString();
   const key = `slide-${type}-${content.id}`;
   return (
   <Container

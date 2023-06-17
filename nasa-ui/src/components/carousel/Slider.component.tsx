@@ -1,11 +1,7 @@
 import React, {
   MouseEvent,
-  useEffect,
   useState,
-  useRef,
-  ReactNode,
   TouchEvent,
-  useCallback,
   useMemo,
 } from "react";
 import styled from "styled-components";
