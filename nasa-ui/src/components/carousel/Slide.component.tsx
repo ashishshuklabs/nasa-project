@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import styled from "styled-components";
 import { SlideContent } from "../../components/carousel/Slider.component";
 import ProgressiveImage from "./ProgressiveImage.component";
