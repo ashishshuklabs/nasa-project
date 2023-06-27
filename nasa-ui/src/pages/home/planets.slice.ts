@@ -13,7 +13,7 @@ export interface PlanetFetchState {
 }
 // "kepid":"7907423","kepoi_name":"K00899.03","kepler_name":"Kepler-249
 const initialState = {
-    loading: true,
+    loading: false,
     planets: [{}],
     error: null,
 } as PlanetFetchState

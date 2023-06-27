@@ -5,7 +5,7 @@ import {
   Slider,
 } from "../../components/carousel/Slider.component";
 import { useSelector, useStore } from "react-redux";
-import { Card } from "../../components/card/card.component";
+import PlanetsCard from "../../components/card/PlanetsCard.component";
 import styled from "styled-components";
 import { SplitScreen } from "../layout/SplitScreen";
 import imagesData from "../../components/carousel/images.json";
@@ -31,7 +31,7 @@ const Home = () => {
     typeof planets !== "string" ? (
       <CardContainer>
         {planets.map((planet) => (
-          <Card key={planet.id} data={planet} />
+          <PlanetsCard key={planet.id} data={planet} />
         ))}
       </CardContainer>
     ) : null;
