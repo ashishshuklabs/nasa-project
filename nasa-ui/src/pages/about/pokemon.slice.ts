@@ -7,23 +7,14 @@ import { fetchPokemonRequest } from '../../api/requests/pokemon'
 // State type will be inferred using the initialState 
 // as defined by this interface
 export interface PokemonFetchState {
-    loading: boolean,
+    pokeLoading: boolean,
     pokemon: Pokemon
     error: string | null,
 }
 
 const initialState = {
-    pokemon: {
-        id: 1,
-        name: '1',
-        base_experience: 1,
-        height: 1,
-        is_default: true,
-        order: 1,
-        weight: 1,
-        location_area_encounters:'Strange places'
-    },
-    loading: false,
+    pokemon: {},
+    pokeLoading: false,
     error: null
 } as PokemonFetchState
 // PayloadAction helps defining the payload type
@@ -33,14 +24,15 @@ const pokemonslice = createSlice({
     initialState,
     reducers: {
         fetchpokemon: (state) => {
-            state.loading = true
+            state.pokeLoading = true
         },
         fetchpokemonSuccess: (state, action: PayloadAction<Pokemon>) => {
-            state.loading = false,
-                state.pokemon = action.payload
+            console.log('changing state now in reducer.....')
+            state.pokeLoading = false,
+            state.pokemon = action.payload
         },
         fetchpokemonFailure: (state, action: PayloadAction<string>) => {
-            state.loading = false;
+            state.pokeLoading = false;
             state.error = action.payload
         }
     }
@@ -50,14 +42,20 @@ export const { fetchpokemon, fetchpokemonSuccess, fetchpokemonFailure } = pokemo
 
 export default pokemonslice.reducer
 
-// Thunk Function
+// Thunk Function: Has to be a promise because we want it to be non-blocking.
 export const fetchPokemonAsync = (idOrName: string): AppThunk => (dispatch, getState) => {
     dispatch(fetchpokemon())
-    fetchPokemonRequest(idOrName)
+    // must return promise to track status during ssr, else loading state is never
+    // registered. If we don't, when the request is fired, loading is set to true but it is
+    // never updated server side because nothing was returned here, so the initial
+    // state will always contain loading = true as the starting point. Normally this 
+    // should return void, when called client side.
+    return fetchPokemonRequest(idOrName)
         .then(response => {
             if (response.type === 'success') {
+                console.log('pokemon fetched, now loading state should be false')
                 dispatch(fetchpokemonSuccess(response.data))
-                console.log('get state in success', getState().pokemon)
+                // console.log('get state in success', getState().pokemon)
                 return
             }
             dispatch(fetchpokemonFailure(response.data.message))

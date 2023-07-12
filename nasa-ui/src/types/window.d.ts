@@ -1,10 +1,14 @@
 import { PlanetFetchState } from "../pages/home/planets.slice"
 import { DataType } from "../api/requests/planets"
+import { PokemonFetchState } from "../pages/about/pokemon.slice"
 
-export {}
+export { }
 
 declare global {
     interface Window {
-        INITIAL_STATE?:PlanetFetchState
+        INITIAL_STATE?: {
+            planets: PlanetFetchState,
+            pokemon: PokemonFetchState
+        }
     }
 }
