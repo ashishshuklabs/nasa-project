@@ -45,11 +45,11 @@ export default pokemonslice.reducer
 // Thunk Function: Has to be a promise because we want it to be non-blocking.
 export const fetchPokemonAsync = (idOrName: string): AppThunk => (dispatch, getState) => {
     dispatch(fetchpokemon())
-    // must return this promise to track status during ssr, else loading state is never
-    // registered. When the request is fired loading is set to true but it is
+    // must return promise to track status during ssr, else loading state is never
+    // registered. If we don't, when the request is fired, loading is set to true but it is
     // never updated server side because nothing was returned here, so the initial
     // state will always contain loading = true as the starting point. Normally this 
-    // should return void
+    // should return void, when called client side.
     return fetchPokemonRequest(idOrName)
         .then(response => {
             if (response.type === 'success') {

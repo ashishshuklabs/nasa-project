@@ -40,30 +40,30 @@ export async function render(
   // Route object has an action object that we could explore and it returns a promise
   // so it is indeed promising.
 
-  const routesWithStore = routes(store);
-  const matched = matchRoutes(routesWithStore, req.path);
+  const completeRoutes = routes(store);
+  const matched = matchRoutes(completeRoutes, req.path);
 
   let promises: Promise<any>[] = []; // array of promises, all path specific data loader functions.
   if (matched) {
-    //ToDo: Fix this
+    // ToDo: Fix this
     // Just returns BaseLayout which is the root so search children
     const parent = matched[0].route.children;
-    parent?.map((r) => {
+    parent?.forEach((r) => {
       if (r.handle) {
         promises.push(r.handle());
       }
       return promises;
     });
   }
-  let { query } = createStaticHandler(routesWithStore);
+  let { query } = createStaticHandler(completeRoutes);
   // All this to make things work via remix garbage
-  //
+  // horrible crap, but atleast
   let remixRequest = createFetchRequest(req);
   let context = await query(remixRequest);
   if (context instanceof Response) {
     throw context;
   }
-  const staticRouter = createStaticRouter(routesWithStore, context);
+  const staticRouter = createStaticRouter(completeRoutes, context);
   const RouteProvider = () => (
     <StaticRouterProvider
       router={staticRouter}
@@ -93,6 +93,7 @@ export async function render(
   } finally {
     sheet.seal();
   }
+  // (1) see note below
   const fetched = async() =>
     Promise.all(promises).then(() => {
       // Now we have all data, return the SSR'd app
@@ -103,7 +104,7 @@ export async function render(
       initialData(JSON.stringify(allData));
       console.log('poekdate is:', allData.pokemon.pokeLoading)
     });
-  await fetched(); // need to fetch the data before returning response, promise is not really a blocking code by design
+  await fetched(); // (1) need to fetch the data before returning response, promise is not really a blocking code by design
   return renderToString(
     <React.StrictMode>
       <Provider store={store}>
