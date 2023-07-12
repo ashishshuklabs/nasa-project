@@ -10,6 +10,8 @@ import styled from "styled-components";
 import { SplitScreen } from "../layout/SplitScreen";
 import imagesData from "../../components/carousel/images.json";
 import { Slide } from "../../components/carousel/Slide.component";
+import { Link } from "react-router-dom";
+import About from "../about/About.page";
 
 export type PlanetType = {
   postId: number;
@@ -41,6 +43,10 @@ const Home = () => {
   return (
     <div>
       <h1>Planets Homepage</h1>
+      <Navigation>
+        <NavItem to="/about">About Us</NavItem>
+        <NavItem to="/contact-us">Contact Us</NavItem>
+      </Navigation>
       <SplitScreen
         heading={
           loading ? "Loading...." : `Loaded ${planets?.length} planets in total`
@@ -67,4 +73,17 @@ const CardContainer = styled.aside`
   flex-direction: column;
   gap: 10px;
   width: 100%;
+`;
+
+const Navigation = styled.ul`
+  display: flex;
+  margin: 0;
+  padding: 0;
+`;
+
+const NavItem = styled(Link)`
+  list-style: none;
+  margin: 5px 10px;
+  color: blueviolet;
+  cursor: pointer;
 `;
