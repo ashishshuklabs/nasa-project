@@ -99,7 +99,7 @@ export async function render(
       // Now we have all data, return the SSR'd app
       // return Promise.resolve("done"); // returning for completeness, tbh we don't need to, as long as promise fulfilled
       // Get the state from the store and set it up as initial data for the client
-      const allData = store.getState(); // Now this should have all the data unlike (1)
+      const allData = store.getState(); // (1) Now this should have all the data unlike 
       
       initialData(JSON.stringify(allData));
       console.log('poekdate is:', allData.pokemon.pokeLoading)
