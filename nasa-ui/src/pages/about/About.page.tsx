@@ -58,7 +58,7 @@ const Button = styled.button`
 `;
 // A generic function to load data on page load.
 // ToDo: Fix types for these
-const loadPokes = (store: Store, idOrName = '5') => {
+const loadPokes = (store: Store, idOrName = '100') => {
   console.log('is store ready..........', {store})
   return store.dispatch(fetchPokemonAsync(idOrName) as unknown as AnyAction);
 };

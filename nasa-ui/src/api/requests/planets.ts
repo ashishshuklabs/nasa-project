@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
 
-const API_URL = 'https://jsonplaceholder.typicode.com/comments'
+const API_URL = 'https://jsonplaceholder.typicode.com/posts/1/comments'
 type PlanetsType = Record<string, any>[]
 
 type DataType = {
