@@ -6,6 +6,7 @@ import express from "express";
 import compression from "compression";
 import serveStatic from "serve-static";
 import { createServer as createViteServer } from "vite";
+import { Writable } from "stream";
 
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
 
@@ -42,12 +43,6 @@ async function createServer(isProd = process.env.NODE_ENV === "production") {
     //   const stylesheets = getStyleSheets();
     app.use("*", async (req: Request, res: Response, next: NextFunction) => {
         const url = req.originalUrl;
-
-        const dynamicScript = (code: string) => {
-            return `
-        <script>${code}</script>
-        `
-        }
         try {
             // 1. Read index.html
             let template = await fs.readFile(isProd ? resolve("dist/client/index.html") : resolve("index.html"), "utf-8");
@@ -63,26 +58,8 @@ async function createServer(isProd = process.env.NODE_ENV === "production") {
             let productionBuildPath = path.join(__dirname, "./dist/server/entry-server.mjs");
             let devBuildPath = path.join(__dirname, "./src/client/entry-server.tsx");
             const { render } = await vite.ssrLoadModule(isProd ? productionBuildPath : devBuildPath);
-            let initData = ''
-            const getData = (data: string) => {
-                initData = `window.INITIAL_STATE=${JSON.parse(serialize(data))}`;
-            }
-            let appStyles = ''
-            const getStyles = (styles: string) => {
-                appStyles = styles
-            }
-            // 4. render the app HTML. This assumes entry-server.js's exported `render`
-            //    function calls appropriate framework SSR APIs,
-            //    e.g. ReactDOMServer.renderToString()
-            const appHtml = await render(req, getData, getStyles);
-
-            // 5. Inject the app-rendered HTML into the template along with any data and css assets
-            const html = template.replace(`<!--app-html-->`, appHtml)
-                .replace('</body>', `${dynamicScript(initData)} </body>`)
-                .replace('<!--css-assets-->', `${appStyles}`);
-
-            // 6. Send the rendered HTML back.
-            res.status(200).set({ "Content-Type": "text/html" }).end(html);
+            // we just need to pass the req, res and template html to be rendered.
+            await render(req, template, res);
         } catch (e: any) {
             !isProd && vite.ssrFixStacktrace(e);
             console.log(e.stack);

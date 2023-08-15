@@ -9,21 +9,22 @@ interface PokemonCardProps {
 }
 
 const PokemonCard = ({ data }: PokemonCardProps) => {
+  const {name, order, location_area_encounters, sprites} = data
   const getChildren = () => (
     <Container data-testid="pokemon-card">
       <Content>
-        <Heading>Name: {data.name}</Heading>
+        <Heading>Name: {name}</Heading>
         <Body>
           <b>Order:</b>
-          <span>{data.order}</span>{" "}
+          <span>{order}</span>{" "}
         </Body>
         <Span>
           <b>Encountered Location:</b>{" "}
-          <span>{data.location_area_encounters}</span>
+          <span>{location_area_encounters}</span>
         </Span>
       </Content>
       <ImageContainer>
-        <Image src={data.sprites?.front_shiny} alt={data.name} />
+        <Image src={sprites?.front_shiny} alt={data.name} />
       </ImageContainer>
     </Container>
   );

@@ -1,13 +1,14 @@
 
 type Status = 'pending' | 'success' | 'error'
 type Response = Promise<any> | Promise<Error>;
-export function promiseWrapper<T extends Response>(promise: Promise<T>) {
+function promiseWrapper<T extends Response>(promise: Promise<T>) {
     let status: Status = 'pending';
     let response: Response;
 
     const suspender = promise.then(
         res => {
             status = 'success';
+            console.log('res is....',res)
             response = res;
         },
         error => {
@@ -32,3 +33,5 @@ export function promiseWrapper<T extends Response>(promise: Promise<T>) {
 
     return { read };
 }
+
+export { promiseWrapper }

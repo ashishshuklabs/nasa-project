@@ -4,15 +4,17 @@ import Contact from "../pages/contact/Contact.page";
 import Homepage from "../pages/home/Home.page";
 import { BaseLayout } from "../pages/common/BaseLayout";
 import { Store } from "@reduxjs/toolkit";
+import { Suspense, lazy } from "react";
 // We could extend route object like below, to support any field that
 // we could pass to a route object.
 // interface Blah extends Omit<RouteObject,'children'>{
 //   handler: any;
 // }
 export const routesWithStore = (store: Store): RouteObject[] => {
+  // const ContactWithSuspense = lazy(() => import('../pages/contact/Contact.page'))
   return [
     {
-      path: "/",
+      // path: "/",
       element: <BaseLayout />, // This is the new way, do not define path and this would be a layout element available everywhere
       children: [
         {

@@ -1,7 +1,5 @@
 import {
-  BrowserRouter,
   RouterProvider,
-  Routes,
   createBrowserRouter
 } from "react-router-dom";
 import { hydrateRoot } from "react-dom/client";
