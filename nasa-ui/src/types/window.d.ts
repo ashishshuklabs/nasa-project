@@ -10,7 +10,7 @@ declare global {
             planets: PlanetFetchState,
             pokemon: PokemonFetchState
         },
-        ChunkData?: Record<string, any>,
+        ChunkData?: Record<string, any>[],
         globalCache?:Map<string, any>
     }
 }

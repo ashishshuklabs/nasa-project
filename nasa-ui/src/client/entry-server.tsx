@@ -127,7 +127,7 @@ export async function render(
       if (!chunk) {
         return;
       }
-      console.log("Chunk....", chunk.toString("utf-8"));
+      // console.log("Chunk....", chunk.toString("utf-8"));
       htmlChunks += chunk;
       // Must call this callback else data is not recieved
       callback();
