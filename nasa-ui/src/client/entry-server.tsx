@@ -8,7 +8,6 @@ import {
 import serialize from "serialize-javascript";
 import { fetchPokemonWithWrapper } from "../api/requests/pokemon";
 
-
 import { renderToString, renderToPipeableStream } from "react-dom/server";
 import { ServerStyleSheet } from "styled-components";
 import React from "react";
@@ -93,7 +92,7 @@ export async function render(
         </Provider>
       )
     );
-    styless = sheet.getStyleTags();
+    styless += sheet.getStyleTags();
   } catch (e: unknown) {
     console.log("style grab failed..", e instanceof Error ? e.message : e);
   } finally {
@@ -133,14 +132,18 @@ export async function render(
       callback();
     },
     final(callback) {
-      // all content is now recieved
-
+      // all content is now recieved --For the shell not the suspended chunks
+      // Have issues with styles not getting injected, donno if its because
+      // of streaming or something else. It's not working only for this usecase
+      // especially contact-us page, works otherwise, so not reading too much
+      // in to it as the main goal was to pay with streaming api and suspense.
+      console.log("styless.....", styless, template);
       res.setHeader("Content-Type", "text/html");
       // 5. Inject the app-rendered HTML into the template along with any data and css assets
       const html = template
+        .replace("<!--css-assets-->", `${styless}`)
         .replace(`<!--app-html-->`, htmlChunks)
-        .replace("</body>", `${dynamicScript(code)} </body>`)
-        .replace("<!--css-assets-->", `${styless}`);
+        .replace("</body>", `${dynamicScript(code)} </body>`);
       res.status(200);
       res.end(html);
     },
@@ -149,7 +152,7 @@ export async function render(
   const { pipe } = renderToPipeableStream(
     <React.StrictMode>
       <Provider store={store}>
-          <RouteProvider />
+        <RouteProvider />
       </Provider>
     </React.StrictMode>,
     {

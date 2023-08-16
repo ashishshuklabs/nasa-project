@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import PokemonCard from "../../components/card/PokemonCard.component";
 import { ServerProvider, useServerData } from "../../api/context/serverContext";
 import { fetchPokemonWithWrapper } from "../../api/requests/pokemon";
-import { Pokemon } from "src/api/types";
 
 const Counter = () => {
   const [count, setCount] = useState(0);
@@ -37,6 +36,16 @@ const Consumer: React.FC<{
   </>;
 };
 
+// You could argue that wrapping the below components make it render faster. The counter
+// is loaded first up while the data for suspended components is being fetched. This still throws
+// hydration error, as the ssr'ed html doesn't match the client rendered html since, the data hungry 
+// components are suspended and load fallback (due to suspense) along with the counter  which is rendered 
+// quickly as it has no data dependency.
+
+// Take away and a positive is, we can fetch data for components individually,
+// render them as they come rather than all at the same time, hence render as
+// you fetch.
+
 const Contact = () => {
   return (
     <>
@@ -47,7 +56,7 @@ const Contact = () => {
         <Counter />
       </div>
       <ServerProvider>
-        <Suspense fallback={<p>Loading contact data...</p>}>
+        <Suspense fallback={<p>Loading poke data...</p>}>
           <Consumer id='poke' fetcher={fetchPokemonWithWrapper('23')}>
             {(poke) => {
                console.log('poke is.....', poke)
@@ -59,7 +68,7 @@ const Contact = () => {
             }}
           </Consumer>
         </Suspense>
-        <Suspense fallback={<p>Loading contact data...</p>}>
+        <Suspense fallback={<p>Loading koke data...</p>}>
           <Consumer id='koke' fetcher={fetchPokemonWithWrapper('4')}>
             {(koke) => {
                console.log('poke is.....', koke)

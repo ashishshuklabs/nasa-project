@@ -4,6 +4,9 @@ import { Pokemon } from "../types";
 
 // Ensure the file extension is .tsx else react will complain, as we're returning jsx in the ServerProvider
 
+// We could have implemented data caches here so that hitting refresh button
+// would not fetch the data and would rather rendered cached data, but seriously have 
+// no apetite for it at the moment, given the current approach doesn't get rid of the hydration error.
 type ProviderProps = {
   cache?: Map<string, any>;
   children: ReactNode;
@@ -25,8 +28,7 @@ const ServerProvider = ({ cache, children }: ProviderProps) => {
     </ServerContext.Provider>
   );
 };
-// This returns fixed data. but atleast works on ssr as well.
-const getFetcher = fetchPokemonWithWrapper("43");
+
 //need a map with id and loader as prop
 // if you wrap multiple components with server
 // context, else it'll render the last fetched
@@ -53,7 +55,6 @@ const useServerData = (id: string, fetcher: {read: () => any}): { loaderScript: 
       }}
     />
   );
-  // const loadScript = (data: any) => `<script>window.ChunkData=${JSON.stringify(data)}</script>`
 
   if (isServer) {
     // this is server data fetching now and the data should be set on the window object using the loadScript
@@ -69,9 +70,12 @@ const useServerData = (id: string, fetcher: {read: () => any}): { loaderScript: 
   }
   // On Client side, just return the data attached with the window object (during server render)
   console.log("this is client request, returning....", window.ChunkData && window.ChunkData, 'id si......', id);
+  // If data fetched on SSR, return data from window object
+  // if page refreshed page and then page with suspense navigated,
+  // we need to fetch the data again, hence calling the suspender again 
   return {
     loaderScript: null,
-    value: window.ChunkData?.filter(e => id in e)[0][id]|| {},
+    value: window.ChunkData ? window.ChunkData.filter(e => id in e)[0][id]: fetcher.read(), // return data based on path/resource id
   };
 };
 
