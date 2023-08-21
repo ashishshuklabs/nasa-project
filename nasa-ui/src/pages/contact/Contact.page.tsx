@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PokemonCard from "../../components/card/PokemonCard.component";
 import { ServerProvider, useServerData } from "../../api/context/serverContext";
 import { fetchPokemonWithWrapper } from "../../api/requests/pokemon";
+import styled from "styled-components";
 
 const Counter = () => {
   const [count, setCount] = useState(0);
@@ -29,7 +30,7 @@ const Consumer: React.FC<{
   const {loaderScript, value} = useServerData(id, fetcher);
   // loader script should be set only on SSR and value should be passed
   // in during client render
-  console.log('env: Server:', typeof window === 'undefined', 'loader script:', loaderScript, 'value is..', value)
+  // console.log('env: Server:', typeof window === 'undefined', 'loader script:', loaderScript, 'value is..', value)
   return <>
   {loaderScript}
   {children(value)}
@@ -56,10 +57,10 @@ const Contact = () => {
         <Counter />
       </div>
       <ServerProvider>
-        <Suspense fallback={<p>Loading poke data...</p>}>
+        <Suspense fallback={<Loader className="loading-suspended">Loading poke data...</Loader>}>
           <Consumer id='poke' fetcher={fetchPokemonWithWrapper('23')}>
             {(poke) => {
-               console.log('poke is.....', poke)
+              //  console.log('poke is.....', poke)
               return (
                 <>
                   <PokemonCard data={poke || {}} />
@@ -68,10 +69,10 @@ const Contact = () => {
             }}
           </Consumer>
         </Suspense>
-        <Suspense fallback={<p>Loading koke data...</p>}>
+        <Suspense fallback={<Loader>Loading koke data...</Loader>}>
           <Consumer id='koke' fetcher={fetchPokemonWithWrapper('4')}>
             {(koke) => {
-               console.log('poke is.....', koke)
+              //  console.log('poke is.....', koke)
 
               return (
                 <>
@@ -88,3 +89,7 @@ const Contact = () => {
 };
 
 export default Contact;
+
+const Loader = styled.p`
+  margin: auto;
+`

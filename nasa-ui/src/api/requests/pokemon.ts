@@ -15,7 +15,7 @@ const fetchPokemonWithWrapper = (idOrName: string): { read: () => any } => {
     const promise = fetch(endpoint)
         .then(res => res.json())
         .then(data => {
-            console.log('Inside fetcher...', data)
+            // console.log('Inside fetcher...', data)
             return data
         })
         .catch(e => console.log("error in fetcher", e));

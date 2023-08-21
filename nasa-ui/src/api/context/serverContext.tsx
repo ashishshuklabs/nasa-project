@@ -62,7 +62,7 @@ const useServerData = (id: string, fetcher: {read: () => any}): { loaderScript: 
     const data: Pokemon = fetcher.read();
     globalCache.set(id, data)
     const script = loadScript(id, data);
-    console.log("glob is...", script);
+    // console.log("glob is...", script);
     return {
       loaderScript: script,
       value: data,

@@ -1,12 +1,9 @@
 import {
-  StaticHandlerContext,
-  StaticRouter,
   StaticRouterProvider,
   createStaticHandler,
   createStaticRouter,
 } from "react-router-dom/server";
 import serialize from "serialize-javascript";
-import { fetchPokemonWithWrapper } from "../api/requests/pokemon";
 
 import { renderToString, renderToPipeableStream } from "react-dom/server";
 import { ServerStyleSheet } from "styled-components";
@@ -22,7 +19,6 @@ import {
   fetchPlanetsSuccess,
 } from "../pages/home/planets.slice";
 import { Writable } from "node:stream";
-import { ServerProvider } from "../api/context/serverContext";
 
 export async function render(
   req: Express.Request,
@@ -50,7 +46,6 @@ export async function render(
 
   let routeDataLoaders: Promise<any>[] = []; // array of promises, all path specific data loader functions.
   if (matched) {
-    // ToDo: Fix this
     // Just returns BaseLayout which is the root so search children
     const parent = matched[0].route.children;
     parent?.forEach((routeDataLoader) => {
@@ -62,7 +57,6 @@ export async function render(
   }
   let { query } = createStaticHandler(completeRoutes);
   // All this to make things work via remix garbage
-  // horrible crap, but atleast it worked
   let remixRequest = createFetchRequest(req);
   let context = await query(remixRequest);
   if (context instanceof Response) {
@@ -80,10 +74,11 @@ export async function render(
   // (1) Get the state from the store and set it up as initial data for the client,
   // But wait this is a mistake, because route data is not fetched yet. So this
   // should be moved to after all promises have been fulfilled
-  // const allData = store.getState();
   // styled components recommends wrapping the style grabbing code in try-catch
   // to ensure styles are capured and sheet instance is appropriately garbage collected
   try {
+    console.log('Is this hit???')
+
     // render app and collect app styles. Do not return response to the browser yet
     renderToString(
       sheet.collectStyles(
@@ -133,11 +128,11 @@ export async function render(
     },
     final(callback) {
       // all content is now recieved --For the shell not the suspended chunks
-      // Have issues with styles not getting injected, donno if its because
-      // of streaming or something else. It's not working only for this usecase
-      // especially contact-us page, works otherwise, so not reading too much
-      // in to it as the main goal was to pay with streaming api and suspense.
-      console.log("styless.....", styless, template);
+      // Styles will not work because, during ssr only the styles corresponding
+      // to fallback passed in to Suspense components, will be grabbed. Essentially,
+      // styled components doesn't work with streaming api(especially with suspense) 
+      // as is highlighted in their github issues page.
+      console.log("styless.....", styless);
       res.setHeader("Content-Type", "text/html");
       // 5. Inject the app-rendered HTML into the template along with any data and css assets
       const html = template
@@ -161,6 +156,9 @@ export async function render(
         pipe(stream);
         // onShellReady()
         // if onShellReady ? onShellReady();
+      },
+      onAllReady() {
+          console.log('On All Ready...', styless)
       },
     }
   );

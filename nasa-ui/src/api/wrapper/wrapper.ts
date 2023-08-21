@@ -8,7 +8,7 @@ function promiseWrapper<T extends Response>(promise: Promise<T>) {
     const suspender = promise.then(
         res => {
             status = 'success';
-            console.log('res is....',res)
+            // console.log('res is....',res)
             response = res;
         },
         error => {
