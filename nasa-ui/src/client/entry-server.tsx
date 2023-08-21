@@ -57,7 +57,6 @@ export async function render(
   }
   let { query } = createStaticHandler(completeRoutes);
   // All this to make things work via remix garbage
-  // horrible crap, but atleast
   let remixRequest = createFetchRequest(req);
   let context = await query(remixRequest);
   if (context instanceof Response) {
@@ -71,10 +70,9 @@ export async function render(
       nonce="the-nonce"
     />
   );
-  // (1) Get the state from the store and set it up as initial data for the client,
+  // Get the state from the store and set it up as initial data for the client,
   // But wait this is a mistake, because route data is not fetched yet. So this
   // should be moved to after all promises have been fulfilled
-  // const allData = store.getState();
   // styled components recommends wrapping the style grabbing code in try-catch
   // to ensure styles are capured and sheet instance is appropriately garbage collected
   try {
@@ -97,9 +95,8 @@ export async function render(
   const fetched = async() =>
     Promise.all(promises).then(() => {
       // Now we have all data, return the SSR'd app
-      // return Promise.resolve("done"); // returning for completeness, tbh we don't need to, as long as promise fulfilled
       // Get the state from the store and set it up as initial data for the client
-      const allData = store.getState(); // (1) Now this should have all the data unlike 
+      const allData = store.getState(); // (1) Now this should have all the data
       
       initialData(JSON.stringify(allData));
       console.log('poekdate is:', allData.pokemon.pokeLoading)
